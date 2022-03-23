@@ -68,3 +68,10 @@ Ensure that you've read through the extensions guidelines and follow the best pr
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
+
+
+## References
+
+-  https://code.visualstudio.com/api/language-extensions/programmatic-language-features
+- https://code.visualstudio.com/api/language-extensions/overview
+- https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
