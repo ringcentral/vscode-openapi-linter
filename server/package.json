@@ -15,5 +15,8 @@
 		"vscode-languageserver": "^7.0.0",
 		"vscode-languageserver-textdocument": "^1.0.4"
 	},
-	"scripts": {}
+	"scripts": {},
+	"devDependencies": {
+		"yarn-upgrade-all": "^0.6.1"
+	}
 }
