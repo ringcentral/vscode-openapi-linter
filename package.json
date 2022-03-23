@@ -1,5 +1,6 @@
 {
   "name": "openapi-linter",
+  "publisher": "chuntaoliu.com",
 	"displayName": "OpenAPI Linter",
 	"description": "OpenAPI Linter powered by Spectral",
 	"version": "0.0.1",

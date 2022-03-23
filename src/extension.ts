@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('openapi-linter.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from OpenAPI Linter!');
+		vscode.window.showInformationMessage('Hello VS Code!');
 	});
 
 	context.subscriptions.push(disposable);
