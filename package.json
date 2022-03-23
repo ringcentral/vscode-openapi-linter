@@ -11,13 +11,15 @@
 	"publisher": "chuntaoliu",
 	"categories": [],
 	"keywords": [
-		"multi-root ready"
+		"OpenAPI",
+		"Spectral"
 	],
 	"engines": {
 		"vscode": "^1.65.0"
 	},
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:plaintext",
+		"onLanguage:yaml"
 	],
 	"main": "./client/out/extension",
 	"contributes": {
