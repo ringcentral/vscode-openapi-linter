@@ -18,7 +18,6 @@
 		"vscode": "^1.65.0"
 	},
 	"activationEvents": [
-		"onLanguage:plaintext",
 		"onLanguage:yaml"
 	],
 	"main": "./client/out/extension",
