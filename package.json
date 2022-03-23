@@ -8,13 +8,13 @@
 		"type": "git",
 		"url": "https://github.com/tylerlong/vscode-openapi-linter"
 	},
-	"publisher": "vscode-samples",
+	"publisher": "chuntaoliu",
 	"categories": [],
 	"keywords": [
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.63.0"
+		"vscode": "^1.65.0"
 	},
 	"activationEvents": [
 		"onLanguage:plaintext"

@@ -4,13 +4,13 @@
 	"author": "Tyler Liu",
 	"license": "MIT",
 	"version": "0.1.0",
-	"publisher": "vscode",
+	"publisher": "chuntaoliu",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/tylerlong/vscode-openapi-linter"
 	},
 	"engines": {
-		"vscode": "^1.63.0"
+		"vscode": "^1.65.0"
 	},
 	"dependencies": {
 		"vscode-languageclient": "^7.0.0"
