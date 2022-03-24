@@ -21,31 +21,7 @@
 		"onLanguage:yaml"
 	],
 	"main": "./client/out/extension",
-	"contributes": {
-		"configuration": {
-			"type": "object",
-			"title": "OpenAPI Linter Configuration",
-			"properties": {
-				"openApiLinter.maxNumberOfProblems": {
-					"scope": "resource",
-					"type": "number",
-					"default": 100,
-					"description": "Controls the maximum number of problems produced by the server."
-				},
-				"openApiLinter.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
-				}
-			}
-		}
-	},
+	"contributes": {},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -b",
