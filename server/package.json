@@ -12,10 +12,12 @@
 		"url": "https://github.com/tylerlong/vscode-openapi-linter"
 	},
 	"dependencies": {
+		"@stoplight/spectral-core": "^1.11.1",
+		"@stoplight/spectral-parsers": "^1.0.1",
+		"@stoplight/spectral-rulesets": "^1.6.0",
 		"vscode-languageserver": "^7.0.0",
 		"vscode-languageserver-textdocument": "^1.0.4"
 	},
-	"scripts": {},
 	"devDependencies": {
 		"yarn-upgrade-all": "^0.6.1"
 	}

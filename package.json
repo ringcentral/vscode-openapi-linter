@@ -52,7 +52,8 @@
 		"watch": "tsc -b -w",
 		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
 		"postinstall": "cd client && yarn install && cd ../server && yarn install && cd ..",
-		"test": "sh ./scripts/e2e.sh"
+		"test": "sh ./scripts/e2e.sh",
+		"upgrade-all": "yarn yarn-upgrade-all && cd client && yarn yarn-upgrade-all && cd ../server && yarn yarn-upgrade-all && cd .."
 	},
 	"devDependencies": {
 		"@types/mocha": "^9.1.0",

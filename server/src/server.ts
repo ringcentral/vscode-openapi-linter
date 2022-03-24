@@ -18,6 +18,13 @@ import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 
+import {Spectral, Document, Ruleset} from '@stoplight/spectral-core';
+import {Yaml} from '@stoplight/spectral-parsers';
+import {oas, asyncapi} from '@stoplight/spectral-rulesets';
+
+const spectral = new Spectral();
+spectral.setRuleset({...asyncapi, ...oas} as unknown as Ruleset);
+
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
@@ -133,42 +140,53 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	const text = textDocument.getText();
-	const pattern = /\b[A-Z]{2,}\b/g;
-	let m: RegExpExecArray | null;
+	// const pattern = /\b[A-Z]{2,}\b/g;
+	// let m: RegExpExecArray | null;
 
-	let problems = 0;
+	// const problems = 0;
 	const diagnostics: Diagnostic[] = [];
-	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
-		problems++;
+	const issues = await spectral.run(new Document(text, Yaml, textDocument.uri));
+	for(const issue of issues) {
 		const diagnostic: Diagnostic = {
 			severity: DiagnosticSeverity.Warning,
-			range: {
-				start: textDocument.positionAt(m.index),
-				end: textDocument.positionAt(m.index + m[0].length)
-			},
-			message: `${m[0]} is all uppercase.`,
-			source: 'ex'
+			code: issue.code,
+			range: issue.range,
+			message: issue.message,
+			source: 'OpenAPI Linter'
 		};
-		if (hasDiagnosticRelatedInformationCapability) {
-			diagnostic.relatedInformation = [
-				{
-					location: {
-						uri: textDocument.uri,
-						range: Object.assign({}, diagnostic.range)
-					},
-					message: 'Spelling matters'
-				},
-				{
-					location: {
-						uri: textDocument.uri,
-						range: Object.assign({}, diagnostic.range)
-					},
-					message: 'Particularly for names'
-				}
-			];
-		}
 		diagnostics.push(diagnostic);
 	}
+	// while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
+	// 	problems++;
+	// 	const diagnostic: Diagnostic = {
+	// 		severity: DiagnosticSeverity.Warning,
+	// 		range: {
+	// 			start: textDocument.positionAt(m.index),
+	// 			end: textDocument.positionAt(m.index + m[0].length)
+	// 		},
+	// 		message: `${m[0]} is all uppercase.`,
+	// 		source: 'ex'
+	// 	};
+	// 	if (hasDiagnosticRelatedInformationCapability) {
+	// 		diagnostic.relatedInformation = [
+	// 			{
+	// 				location: {
+	// 					uri: textDocument.uri,
+	// 					range: Object.assign({}, diagnostic.range)
+	// 				},
+	// 				message: 'Spelling matters'
+	// 			},
+	// 			{
+	// 				location: {
+	// 					uri: textDocument.uri,
+	// 					range: Object.assign({}, diagnostic.range)
+	// 				},
+	// 				message: 'Particularly for names'
+	// 			}
+	// 		];
+	// 	}
+	// 	diagnostics.push(diagnostic);
+	// }
 
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
