@@ -1,0 +1,8 @@
+rules:
+  my-rule-name:
+    description: Tags must have a description.
+    given: $.tags[*]
+    severity: error
+    then:
+      field: description
+      function: truthy

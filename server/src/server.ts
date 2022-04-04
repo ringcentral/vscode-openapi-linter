@@ -1,7 +1,6 @@
 import {
 	createConnection,
 	TextDocuments,
-	DiagnosticSeverity,
 	ProposedFeatures,
 	InitializeParams,
 	TextDocumentSyncKind,
@@ -42,16 +41,19 @@ documents.onDidChangeContent(change => {
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	const text = textDocument.getText();
-	const issues = await spectral.run(new Document(text, Yaml, 'spec.yaml'));
-	const diagnostics = issues.map(issue => ({
+	let diagnostics: Diagnostic[] = [];
+	if(text.startsWith('openapi:')) {
+		const issues = await spectral.run(new Document(text, Yaml, 'spec.yaml'));
+		diagnostics = issues.map(issue => ({
 			severity: issue.severity + 1,
 			code: issue.code,
 			range: issue.range,
 			message: issue.message,
 			source: 'OpenAPI Linter'
-	}));
+		})) as Diagnostic[];
+	}
 	// Send the computed diagnostics to VSCode.
-	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: (diagnostics as Diagnostic[]) });
+	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
 // Make the text document manager listen on the connection
