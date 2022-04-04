@@ -5,7 +5,8 @@ import {
 	ProposedFeatures,
 	InitializeParams,
 	TextDocumentSyncKind,
-	InitializeResult
+	InitializeResult,
+	Diagnostic
 } from 'vscode-languageserver/node';
 import {
 	TextDocument
@@ -43,14 +44,14 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	const text = textDocument.getText();
 	const issues = await spectral.run(new Document(text, Yaml, 'spec.yaml'));
 	const diagnostics = issues.map(issue => ({
-		severity: DiagnosticSeverity.Warning,
+			severity: issue.severity + 1,
 			code: issue.code,
 			range: issue.range,
 			message: issue.message,
 			source: 'OpenAPI Linter'
 	}));
 	// Send the computed diagnostics to VSCode.
-	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics: (diagnostics as Diagnostic[]) });
 }
 
 // Make the text document manager listen on the connection
