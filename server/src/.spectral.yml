@@ -1,8 +1,13 @@
+extends: ["spectral:oas", "spectral:asyncapi"]
 rules:
-  my-rule-name:
-    description: Tags must have a description.
-    given: $.tags[*]
+  ensure-paths-kebab-case:
+    description: Paths must be in kebab-case.
+    message: '{{description}} (lower case and separated with hyphens)'
+    formats: [oas3]
+    type: style
     severity: error
+    given: $.paths[*]~
     then:
-      field: description
-      function: truthy
+      function: pattern
+      functionOptions:
+        match: "^(\/|[a-z0-9-.]+|{[a-zA-Z0-9]+})+$"

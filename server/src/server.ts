@@ -12,10 +12,17 @@ import {
 } from 'vscode-languageserver-textdocument';
 import {Spectral, Document, Ruleset} from '@stoplight/spectral-core';
 import {Yaml} from '@stoplight/spectral-parsers';
-import {oas, asyncapi} from '@stoplight/spectral-rulesets';
+import * as fs from 'fs';
+import {join} from 'path';
+import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
 
 const spectral = new Spectral();
-spectral.setRuleset({...asyncapi, ...oas} as unknown as Ruleset);
+(async () => {
+  const rulesetFilePath = join(__dirname, '.spectral.yml');
+  const customRules = await bundleAndLoadRuleset(rulesetFilePath, {fs, fetch: globalThis.fetch});
+  spectral.setRuleset(customRules);
+})();
+
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
