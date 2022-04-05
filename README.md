@@ -21,9 +21,9 @@ If there is neither local nor global `.spectral.yml` specified. A default `.spec
 
 ### References
 
-- https://code.visualstudio.com/api/get-started/your-first-extension
-- https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
-- https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
+- Get started: https://code.visualstudio.com/api/get-started/your-first-extension
+- Programming guide: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
+- Sample project: https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
 
 
 ## Enable trace logging
