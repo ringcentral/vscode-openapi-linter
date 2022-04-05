@@ -5,24 +5,46 @@ import {
   InitializeParams,
   TextDocumentSyncKind,
   InitializeResult,
-  Diagnostic
+  Diagnostic,
+  DidChangeConfigurationNotification
 } from 'vscode-languageserver/node';
 import {
   TextDocument
 } from 'vscode-languageserver-textdocument';
-import {Spectral, Document, Ruleset} from '@stoplight/spectral-core';
+import {Spectral, Document} from '@stoplight/spectral-core';
 import {Yaml} from '@stoplight/spectral-parsers';
 import * as fs from 'fs';
-import {join} from 'path';
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
 
+interface LinterSettings {
+  spectralRulesetsFile: string | null;
+}
+const fakeFS: any = {
+  promises: {
+    async readFile(filepath: string) {
+      if (filepath === '/.spectral-default.yaml') {
+        return `extends: ["spectral:oas", "spectral:asyncapi"]`;
+      }
+      return fs.promises.readFile(filepath);
+    },
+  },
+};
 const spectral = new Spectral();
-(async () => {
-  const rulesetFilePath = join(__dirname, '.spectral.yml');
-  const customRules = await bundleAndLoadRuleset(rulesetFilePath, {fs, fetch: globalThis.fetch});
+let initialized = false;
+const loadConfig = async () => {
+  let settings: LinterSettings;
+  if(initialized) {
+    settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
+  } else {
+    settings = {spectralRulesetsFile: null};
+  }
+  const customRules = await bundleAndLoadRuleset(settings.spectralRulesetsFile ?? '/.spectral-default.yaml', {
+    fs: fakeFS,
+    fetch: globalThis.fetch,
+  });
   spectral.setRuleset(customRules);
-})();
-
+};
+loadConfig();
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -38,6 +60,16 @@ connection.onInitialize((params: InitializeParams) => {
     }
   };
   return result;
+});
+
+connection.onInitialized(async () => {
+  initialized = true;
+  connection.client.register(DidChangeConfigurationNotification.type, undefined);
+});
+
+connection.onDidChangeConfiguration(async change => {
+  await loadConfig();
+  documents.all().forEach(validateTextDocument);
 });
 
 // The content of a text document has changed. This event is emitted

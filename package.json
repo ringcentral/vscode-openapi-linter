@@ -22,7 +22,20 @@
     "onLanguage:yaml"
   ],
   "main": "./client/out/extension",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "OpenAPI Linter Configuration",
+      "properties": {
+        "openApiLinter.spectralRuleSetsFile": {
+          "type": ["string", null],
+          "scope": "resource",
+          "default": null,
+          "description": "Specify the path to the Spectral rulesets file."
+        }
+      }
+    }
+  },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -b",
