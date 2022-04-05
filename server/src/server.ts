@@ -14,10 +14,11 @@ import {
 import {Spectral, Document} from '@stoplight/spectral-core';
 import {Yaml} from '@stoplight/spectral-parsers';
 import * as fs from 'fs';
+import {join} from 'path';
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
 
 interface LinterSettings {
-  spectralRulesetsFile: string | null;
+  spectralRulesetsFile: string;
 }
 const fakeFS: any = {
   promises: {
@@ -34,11 +35,23 @@ let initialized = false;
 const loadConfig = async () => {
   let settings: LinterSettings;
   if(initialized) {
-    settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
+    const workspacePath = (await connection.workspace.getWorkspaceFolders())![0].uri;
+    let spectralRulesetsFile = join(workspacePath, '.spectral.yml');
+    if(spectralRulesetsFile.startsWith('file:')) {
+      spectralRulesetsFile = spectralRulesetsFile.substring(5);
+    }
+    if(fs.existsSync(spectralRulesetsFile)){
+      settings = {spectralRulesetsFile};
+    } else {
+      settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
+      if(!fs.existsSync(settings.spectralRulesetsFile ?? '')) {
+        settings.spectralRulesetsFile = '/.spectral-default.yaml';
+      }
+    }
   } else {
-    settings = {spectralRulesetsFile: null};
+    settings = {spectralRulesetsFile: '/.spectral-default.yaml'};
   }
-  const customRules = await bundleAndLoadRuleset(settings.spectralRulesetsFile ?? '/.spectral-default.yaml', {
+  const customRules = await bundleAndLoadRuleset(settings.spectralRulesetsFile, {
     fs: fakeFS,
     fetch: globalThis.fetch,
   });
@@ -69,6 +82,11 @@ connection.onInitialized(async () => {
 
 connection.onDidChangeConfiguration(async change => {
   await loadConfig();
+  documents.all().forEach(validateTextDocument);
+});
+
+connection.onDidChangeWatchedFiles(async params => {
+  loadConfig();
   documents.all().forEach(validateTextDocument);
 });
 

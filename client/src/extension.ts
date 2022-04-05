@@ -42,8 +42,8 @@ export function activate(context: ExtensionContext) {
       { scheme: 'file', language: 'yaml' },
     ],
     synchronize: {
-      // Notify the server about file changes to '.clientrc files contained in the workspace
-      fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
+      // Notify the server about file changes to '.spectral.yml files contained in the workspace
+      fileEvents: workspace.createFileSystemWatcher('**/.spectral.yml')
     }
   };
 
