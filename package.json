@@ -3,11 +3,11 @@
   "description": "OpenAPI Linter",
   "author": "Tyler Liu",
   "license": "MIT",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tylerlong/vscode-openapi-linter"
+    "url": "https://github.com/ringcentral/vscode-openapi-linter"
   },
   "publisher": "chuntaoliu",
   "categories": [],

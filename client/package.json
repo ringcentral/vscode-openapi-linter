@@ -7,7 +7,7 @@
   "publisher": "chuntaoliu",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tylerlong/vscode-openapi-linter"
+    "url": "https://github.com/ringcentral/vscode-openapi-linter"
   },
   "engines": {
     "vscode": "^1.65.0"

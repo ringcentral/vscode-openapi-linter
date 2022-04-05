@@ -24,9 +24,10 @@ If there is neither local nor global `.spectral.yml` specified. A default `.spec
 - Get started: https://code.visualstudio.com/api/get-started/your-first-extension
 - Programming guide: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
 - Sample project: https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
+- Publish: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 
 
-## Enable trace logging
+### Enable trace logging
 
 Add the following to VS Code `setting.json`:
 
@@ -37,3 +38,11 @@ Add the following to VS Code `setting.json`:
 Then go open the "OUTPUT" window of VS Code and check channel "OpenAPI Linter":
 
 ![](./images/screenshot-2.png)
+
+
+### Release
+
+```
+yarn vsce package
+yarn vsce publish
+```
