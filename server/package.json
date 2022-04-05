@@ -19,6 +19,7 @@
     "vscode-languageserver-textdocument": "^1.0.4"
   },
   "devDependencies": {
+    "@types/node-fetch": "^2.6.1",
     "yarn-upgrade-all": "^0.7.1"
   }
 }
