@@ -77,6 +77,8 @@ connection.onInitialize((params: InitializeParams) => {
 
 connection.onInitialized(async () => {
   initialized = true;
+  await loadConfig();
+  documents.all().forEach(validateTextDocument);
   connection.client.register(DidChangeConfigurationNotification.type, undefined);
 });
 
@@ -86,7 +88,7 @@ connection.onDidChangeConfiguration(async change => {
 });
 
 connection.onDidChangeWatchedFiles(async params => {
-  loadConfig();
+  await loadConfig();
   documents.all().forEach(validateTextDocument);
 });
 
