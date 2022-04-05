@@ -27,7 +27,7 @@
       "type": "object",
       "title": "OpenAPI Linter Configuration",
       "properties": {
-        "openApiLinter.spectralRuleSetsFile": {
+        "openApiLinter.spectralRulesetsFile": {
           "type": ["string", null],
           "scope": "resource",
           "default": null,
