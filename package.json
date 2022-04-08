@@ -32,6 +32,13 @@
           "scope": "resource",
           "default": null,
           "description": "Specify the path to the Spectral rulesets file."
+        },
+        "openApiLinter.trace.server": {
+          "type": "string",
+          "scope": "resource",
+          "default": "off",
+          "enum": ["off", "verbose"],
+          "description": "Specify trace level."
         }
       }
     }
