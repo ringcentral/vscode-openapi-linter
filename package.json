@@ -3,7 +3,7 @@
   "description": "OpenAPI Linter",
   "author": "Tyler Liu",
   "license": "MIT",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
@@ -25,10 +25,10 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "OpenAPI Linter Configuration",
+      "title": "OpenAPI Linter",
       "properties": {
         "openApiLinter.spectralRulesetsFile": {
-          "type": ["string", null],
+          "type": "string",
           "scope": "resource",
           "default": null,
           "description": "Specify the path to the Spectral rulesets file."

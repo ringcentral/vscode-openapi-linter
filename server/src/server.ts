@@ -44,7 +44,7 @@ const loadConfig = async () => {
       settings = {spectralRulesetsFile};
     } else {
       settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
-      if(!fs.existsSync(settings.spectralRulesetsFile ?? '')) {
+      if(!fs.existsSync(settings.spectralRulesetsFile)) {
         settings.spectralRulesetsFile = '/.spectral-default.yaml';
       }
     }
