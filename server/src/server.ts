@@ -115,6 +115,10 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
+documents.onDidClose(e => {
+  connection.sendDiagnostics({ uri: e.document.uri, diagnostics: [] });
+});
+
 // Make the text document manager listen on the connection
 // for open, change and close text document events
 documents.listen(connection);
