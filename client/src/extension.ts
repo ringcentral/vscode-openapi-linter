@@ -40,6 +40,7 @@ export function activate(context: ExtensionContext) {
     // Register the server for plain text documents
     documentSelector: [
       { scheme: 'file', language: 'yaml' },
+      { scheme: 'file', language: 'json' },
     ],
     synchronize: {
       // Notify the server about file changes to '.spectral.yml files contained in the workspace

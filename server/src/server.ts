@@ -12,7 +12,7 @@ import {
   TextDocument
 } from 'vscode-languageserver-textdocument';
 import {Spectral, Document} from '@stoplight/spectral-core';
-import {Yaml} from '@stoplight/spectral-parsers';
+import {Yaml, Json} from '@stoplight/spectral-parsers';
 import * as fs from 'fs';
 import {join} from 'path';
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
@@ -104,7 +104,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     (settings.validateFiles.length == 0 && text.startsWith('openapi:'))
     || settings.validateFiles.some(validateFile => minimatch(textDocument.uri, validateFile))
   ) {
-    const issues = await spectral.run(new Document(text, Yaml, 'spec.yaml'));
+    const document = textDocument.uri.toLowerCase().endsWith('.json') ? new Document(text, Json, 'spec.json') : new Document(text, Yaml, 'spec.yaml');
+    const issues = await spectral.run(document);
     diagnostics = issues.map(issue => ({
       severity: issue.severity + 1,
       code: issue.code,

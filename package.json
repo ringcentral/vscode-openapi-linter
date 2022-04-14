@@ -3,7 +3,7 @@
   "description": "OpenAPI Linter",
   "author": "Tyler Liu",
   "license": "MIT",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
@@ -19,7 +19,8 @@
     "vscode": "^1.65.0"
   },
   "activationEvents": [
-    "onLanguage:yaml"
+    "onLanguage:yaml",
+    "onLanguage:json"
   ],
   "main": "./client/out/extension",
   "contributes": {
@@ -40,7 +41,7 @@
           },
           "scope": "resource",
           "default": [],
-          "description": "An array of file globs(e.g., `**/*.yml`). Only matching files will be linted. If you don't specify one, yaml files that start with 'openapi:' will be linted"
+          "description": "An array of file globs(e.g., `**/spec.yml`, `**/spec.json`). Only matching files will be linted. If you don't specify one, yaml files that start with 'openapi:' will be linted"
         },
         "openApiLinter.trace.server": {
           "type": "string",

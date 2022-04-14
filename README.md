@@ -2,7 +2,7 @@
 
 ![](./images/screenshot-1.png)
 
-It will lint yaml files which start with "openapi:".
+It will lint YAML files which start with "openapi:". By default, it doesn't lint JSON files. You may change the `openApiLinter.validateFiles` settings to enable JSON support.
 
 It is powered by [Spectral](https://stoplight.io/open-source/spectral/). You can specify a custom ruleset file by adding
 
