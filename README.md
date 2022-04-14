@@ -25,6 +25,8 @@ If there is neither local nor global `.spectral.yml` specified. A default `.spec
 - Programming guide: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
 - Sample project: https://github.com/microsoft/vscode-extension-samples/tree/main/lsp-sample
 - Publish: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+- Demo project for Spectral: https://github.com/tylerlong/spectral-demo
+	- there is an known issue
 
 
 ### Enable trace logging

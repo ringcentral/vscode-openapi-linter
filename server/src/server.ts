@@ -16,12 +16,13 @@ import {Yaml} from '@stoplight/spectral-parsers';
 import * as fs from 'fs';
 import {join} from 'path';
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
+import * as minimatch from 'minimatch';
 
 interface LinterSettings {
   spectralRulesetsFile: string;
   validateFiles: string[];
 }
-const defaultSettings: LinterSettings = {
+let settings: LinterSettings = {
   spectralRulesetsFile: '/.spectral-default.yaml', 
   validateFiles: []
 };
@@ -38,7 +39,6 @@ const fakeFS: any = {
 const spectral = new Spectral();
 let initialized = false;
 const loadConfig = async () => {
-  let settings = defaultSettings;
   if(initialized) {
     settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
     const workspacePath = (await connection.workspace.getWorkspaceFolders())![0].uri;
@@ -100,7 +100,10 @@ documents.onDidChangeContent(change => {
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   const text = textDocument.getText();
   let diagnostics: Diagnostic[] = [];
-  if(text.startsWith('openapi:')) {
+  if(
+    (settings.validateFiles.length == 0 && text.startsWith('openapi:'))
+    || settings.validateFiles.some(validateFile => minimatch(textDocument.uri, validateFile))
+  ) {
     const issues = await spectral.run(new Document(text, Yaml, 'spec.yaml'));
     diagnostics = issues.map(issue => ({
       severity: issue.severity + 1,
