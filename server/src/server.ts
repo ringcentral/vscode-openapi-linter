@@ -40,12 +40,20 @@ const spectral = new Spectral();
 let initialized = false;
 const loadConfig = async () => {
   if(initialized) {
+    // load config
     settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
+
+    // local config
     const workspacePath = (await connection.workspace.getWorkspaceFolders())![0].uri;
-    const spectralRulesetsFile = join(workspacePath, '.spectral.yml');
-    if(spectralRulesetsFile.startsWith('file:')) {
-      settings.spectralRulesetsFile = spectralRulesetsFile.substring(5);
+    let localRulesetsFile = join(workspacePath, '.spectral.yml');
+    if(localRulesetsFile.startsWith('file:')) {
+      localRulesetsFile = localRulesetsFile.substring(5);
     }
+    if(fs.existsSync(localRulesetsFile)) {
+      settings.spectralRulesetsFile = localRulesetsFile;
+    }
+
+    // default config
     if(settings.spectralRulesetsFile == null || !fs.existsSync(settings.spectralRulesetsFile)) {
       settings.spectralRulesetsFile = '/.spectral-default.yaml';
     }
