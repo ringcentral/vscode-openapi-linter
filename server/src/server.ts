@@ -46,7 +46,7 @@ const loadConfig = async () => {
     if(spectralRulesetsFile.startsWith('file:')) {
       settings.spectralRulesetsFile = spectralRulesetsFile.substring(5);
     }
-    if(settings.spectralRulesetsFile == null || !fs.existsSync(spectralRulesetsFile)) {
+    if(settings.spectralRulesetsFile == null || !fs.existsSync(settings.spectralRulesetsFile)) {
       settings.spectralRulesetsFile = '/.spectral-default.yaml';
     }
   }
