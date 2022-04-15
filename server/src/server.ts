@@ -112,7 +112,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     (settings.validateFiles.length == 0 && text.startsWith('openapi:'))
     || settings.validateFiles.some(validateFile => minimatch(textDocument.uri, validateFile))
   ) {
-    const document = textDocument.uri.toLowerCase().endsWith('.json') ? new Document(text, Json, 'spec.json') : new Document(text, Yaml, 'spec.yaml');
+    const workspaceFolder = (await connection.workspace.getWorkspaceFolders())![0].uri;
+    const filePath = textDocument.uri.substring(workspaceFolder.length + 1);
+    const document = filePath.toLowerCase().endsWith('.json') ? new Document(text, Json, filePath) : new Document(text, Yaml, filePath);
     const issues = await spectral.run(document);
     diagnostics = issues.map(issue => ({
       severity: issue.severity + 1,
