@@ -3,7 +3,7 @@
   "description": "OpenAPI Linter",
   "author": "Tyler Liu",
   "license": "MIT",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "icon": "images/icon.png",
   "repository": {
     "type": "git",

@@ -49,6 +49,9 @@ yarn vsce package
 yarn vsce publish
 ```
 
+If Azure personal token expired, login dev.azure.com, find the publisher name, find the the token and edit it to extend its lifetime. No need to create a new token.
+
+
 ### Known issues
 
 - https://github.com/tylerlong/spectral-demo#known-issues

@@ -48,10 +48,12 @@ const spectral = new Spectral({
   })
 });
 let initialized = false;
+let watcher: fs.FSWatcher | null = null;
 const loadConfig = async () => {
   if (initialized) {
     // load config
     settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
+    const globalConfigFile = settings.spectralRulesetsFile;
 
     // local config
     const workspacePath = (await connection.workspace.getWorkspaceFolders())![0].uri;
@@ -66,6 +68,19 @@ const loadConfig = async () => {
     // default config
     if (settings.spectralRulesetsFile == null || !fs.existsSync(settings.spectralRulesetsFile)) {
       settings.spectralRulesetsFile = '/.spectral-default.yaml';
+    }
+
+    if (settings.spectralRulesetsFile == globalConfigFile) {
+      if (watcher !== null) {
+        watcher.close();
+      }
+      watcher = fs.watch(globalConfigFile, async () => {
+        await loadConfig();
+        documents.all().forEach(validateTextDocument);
+      });
+    } else if (watcher != null) {
+      watcher.close();
+      watcher = null;
     }
   }
   const customRules = await bundleAndLoadRuleset(settings.spectralRulesetsFile, {
