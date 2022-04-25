@@ -11,10 +11,10 @@ import {
 import {
   TextDocument
 } from 'vscode-languageserver-textdocument';
-import {Spectral, Document} from '@stoplight/spectral-core';
-import {Yaml, Json} from '@stoplight/spectral-parsers';
+import { Spectral, Document } from '@stoplight/spectral-core';
+import { Yaml, Json } from '@stoplight/spectral-parsers';
 import * as fs from 'fs';
-import {join} from 'path';
+import { join } from 'path';
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
 import * as minimatch from 'minimatch';
 
@@ -23,7 +23,7 @@ interface LinterSettings {
   validateFiles: string[];
 }
 let settings: LinterSettings = {
-  spectralRulesetsFile: '/.spectral-default.yaml', 
+  spectralRulesetsFile: '/.spectral-default.yaml',
   validateFiles: []
 };
 const fakeFS: any = {
@@ -39,22 +39,22 @@ const fakeFS: any = {
 const spectral = new Spectral();
 let initialized = false;
 const loadConfig = async () => {
-  if(initialized) {
+  if (initialized) {
     // load config
     settings = await connection.workspace.getConfiguration('openApiLinter') as LinterSettings;
 
     // local config
     const workspacePath = (await connection.workspace.getWorkspaceFolders())![0].uri;
     let localRulesetsFile = join(workspacePath, '.spectral.yml');
-    if(localRulesetsFile.startsWith('file:')) {
+    if (localRulesetsFile.startsWith('file:')) {
       localRulesetsFile = localRulesetsFile.substring(5);
     }
-    if(fs.existsSync(localRulesetsFile)) {
+    if (fs.existsSync(localRulesetsFile)) {
       settings.spectralRulesetsFile = localRulesetsFile;
     }
 
     // default config
-    if(settings.spectralRulesetsFile == null || !fs.existsSync(settings.spectralRulesetsFile)) {
+    if (settings.spectralRulesetsFile == null || !fs.existsSync(settings.spectralRulesetsFile)) {
       settings.spectralRulesetsFile = '/.spectral-default.yaml';
     }
   }
@@ -103,12 +103,17 @@ connection.onDidChangeWatchedFiles(async params => {
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent(change => {
   validateTextDocument(change.document);
+  documents.all().forEach(document => {
+    if (document.getText().includes(change.document.uri.replace(/^.*[\\/]/, ''))) {
+      validateTextDocument(document);
+    }
+  });
 });
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
   const text = textDocument.getText();
   let diagnostics: Diagnostic[] = [];
-  if(
+  if (
     (settings.validateFiles.length == 0 && text.startsWith('openapi:'))
     || settings.validateFiles.some(validateFile => minimatch(textDocument.uri, validateFile))
   ) {
