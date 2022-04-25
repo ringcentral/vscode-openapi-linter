@@ -17,6 +17,8 @@ import * as fs from 'fs';
 import { join } from 'path';
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/dist/loader/node";
 import * as minimatch from 'minimatch';
+import { resolveFile } from '@stoplight/json-ref-readers';
+import { Resolver, Cache } from '@stoplight/json-ref-resolver';
 
 interface LinterSettings {
   spectralRulesetsFile: string;
@@ -36,7 +38,15 @@ const fakeFS: any = {
     },
   },
 };
-const spectral = new Spectral();
+const cache = new Cache();
+const spectral = new Spectral({
+  resolver: new Resolver({
+    resolvers: {
+      file: { resolve: resolveFile },
+    },
+    uriCache: cache
+  })
+});
 let initialized = false;
 const loadConfig = async () => {
   if (initialized) {
@@ -101,11 +111,15 @@ connection.onDidChangeWatchedFiles(async params => {
 
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
-documents.onDidChangeContent(change => {
-  validateTextDocument(change.document);
-  documents.all().forEach(document => {
+documents.onDidChangeContent(async change => {
+  await validateTextDocument(change.document);
+});
+
+documents.onDidSave(change => {
+  documents.all().forEach(async document => {
     if (document.getText().includes(change.document.uri.replace(/^.*[\\/]/, ''))) {
-      validateTextDocument(document);
+      cache.purge();
+      await validateTextDocument(document);
     }
   });
 });
