@@ -48,3 +48,8 @@ Then go open the "OUTPUT" window of VS Code and check channel "OpenAPI Linter":
 yarn vsce package
 yarn vsce publish
 ```
+
+### Known issues
+
+- https://github.com/tylerlong/spectral-demo#known-issues
+- https://github.com/stoplightio/spectral/pull/2062#issuecomment-1108787968
