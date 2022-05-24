@@ -13,10 +13,10 @@
     "vscode": "^1.65.0"
   },
   "dependencies": {
-    "vscode-languageclient": "^7.0.0"
+    "vscode-languageclient": "^8.0.1"
   },
   "devDependencies": {
-    "@types/vscode": "^1.66.0",
+    "@types/vscode": "^1.67.0",
     "@vscode/test-electron": "^2.1.3",
     "yarn-upgrade-all": "^0.7.1"
   }
